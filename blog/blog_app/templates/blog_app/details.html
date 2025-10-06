@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Posts</title>
+
+    <style>
+        
+        body 
+    {
+        font-family: Arial, sans-serif;
+        background:#a6e292ff;
+    }
+.container {
+        
+            text-align: center;
+            justify-content:center;
+            background:black;
+            width:390px;
+            margin:auto; 
+            border-radius:5px;
+        }
+         h1{
+            color:#a6e292ff;
+            
+        }
+        
+        ul{
+            background:black;
+            list-style-type:none;
+            text-align:left;
+            width: fit-content;
+           
+
+        }
+       
+
+        li{
+            background:#a6e292ff;
+            width: 302px;
+            margin-bottom: 5px;
+            
+            border-radius:2px;
+            color:black;
+            margin-left:2px;
+            word-wrap: break-word;
+            padding-left: 5px;
+            
+        }
+        a{
+            text-decoration:none;
+        }
+        button {
+     display: inline-block;
+        margin: 5px;
+        padding: 8px 12px;
+            background: #a6e292ff;
+            color: black;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        button a{
+            color:black;
+            text-decoration: none;
+
+        }
+
+      
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>All Blog Posts</h1>
+    <ul>
+        {% for post in posts %}
+           <a href="{% url 'post_detail' post.id %}">
+            <li>
+                {{ post.title }}
+            </li>
+           </a>
+        {% empty %}
+            <li>No posts yet.</li>
+        {% endfor %}
+    </ul>
+    
+    <button>
+    <a href="{% url 'create_post' %}">Create New Post</a>
+    </button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit {{ post.title }}</title>
+
+    <style>
+
+body 
+    {
+        font-family: Arial, sans-serif;
+        background:#a6e292ff;
+    }
+.container {
+        
+            text-align: center;
+            justify-content:center;
+            background:black;
+            width:390px;
+            margin:auto; 
+            border-radius:5px;
+        }
+
+button,.container a {
+     display: inline-block;
+        margin: 5px;
+        padding: 8px 12px;
+            background: #a6e292ff;
+            color: black;
+            text-decoration: none;
+            border-radius: 4px;
+
+}
+form{
+    color:#a6e292ff;
+            text-align:left;
+            padding-left:5px;
+}
+h3{
+    color:#a6e292ff;
+}
+    
+
+
+
+    </style>
+</head>
+<body>
+    <div class='container'>
+    <h3>Edit Post: {{ post.title }}</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="{% url 'post_detail' post.id %}">Cancel</a>
+</div>
+</body>
+</html>
