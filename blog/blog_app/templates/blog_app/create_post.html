@@ -1,64 +1,138 @@
-
 <!DOCTYPE html>
-<html>
 <head>
-    <title>Create Post</title>
-
+    <title>Create New Post</title>
     <style>
-       
-        body 
-    {
-        font-family: Arial, sans-serif;
-        background:#a6e292ff;
-    }
-.container {
-        
-            text-align: center;
-            justify-content:center;
-            background:black;
-            width:390px;
-            margin:auto; 
-            border-radius:5px;
-        }
-        h1{
-            color:#a6e292ff;
-        }
-        form{
-            color:#a6e292ff;
-            text-align:left;
-            padding-left:5px;
-            
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f8fa;
+            margin: 0;
+            padding: 0;
         }
 
-        button {
-     display: inline-block;
-        margin: 5px;
-            padding:8px 12px;
-            background: #a6e292ff;
-            color: black;
+       
+        .topnav {
+            background-color: #ffffff;
+            padding: 15px 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topnav a {
             text-decoration: none;
-            border-radius: 4px;
-
-}
-  
-       
-        a{
-            color:black;
-            text-decoration:none;
+            color: #333;
+            font-weight: 500;
+            margin-left: 15px;
         }
-        
+
+        .topnav a:hover {
+            color: #007bff;
+        }
+
+        .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+        }
+
+     
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #444;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-save {
+            background-color: #006aff;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #005ae0;
+        }
+
+        .btn-back {
+            background-color: #7a7a7a;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #5e5e5e;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
-    <div class='container'>
-    <h1>Create New Blog Post</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
-    <button><a href="{% url 'showblog' %}">Back to Posts</a></button>
-   </div>
+    <div class="topnav">
+        <div class="brand">Django Blog</div>
+        <div>
+            <a href="/posts/">All Posts</a>
+            <a class="active" href="/create/">Create Post</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Create New Post</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="id_title">Post Title</label>
+            <input type="text" id="id_title" name="title" placeholder="Enter post title" required>
+
+            <label for="id_content">Content</label>
+            <textarea id="id_content" name="content" placeholder="Write your blog content here..." required></textarea>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-save">Save Post</button>
+                <a href="{% url 'showblog' %}" class="btn btn-back">Back to Posts</a>
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>

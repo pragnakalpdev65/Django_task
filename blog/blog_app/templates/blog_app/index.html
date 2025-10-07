@@ -4,13 +4,7 @@
 <head>
     <title>My Blog</title>
     <style>
-
-        body{
-            background:#a6e292ff;
-        }
-        h1{
-            color:black;
-        }
+  
         .container {
             text-align: center;
             justify-content:center;
@@ -20,19 +14,49 @@
         margin: 5px;
         padding: 8px 12px;
         background: black;
-        color: #a6e292ff;
         text-decoration: none;
         border:none;
         border-radius: 4px;
         }
+
+        .topnav {
+            background-color: #ffffff;
+            padding: 15px 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topnav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            margin-left: 15px;
+        }
+
+        .topnav a:hover {
+            color: #007bff;
+        }
+
+        .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+        }
     </style>
 </head>
 <body>
+    <div class="topnav">
+        <div class="brand">Django Blog</div>
+        <div>
+            <a href="/posts/">All Posts</a>
+            <a class="active" href="/create/">Create Post</a>
+        </div>
+    </div>
+
     <div class='container'>
     <h1>Welcome to the Blog!</h1>
-    <a href="/posts/">
-    <button>Show Blogs</button>
-    </a>
     </div>
 </body>
 </html>

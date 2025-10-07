@@ -5,86 +5,145 @@
 
     <style>
         
-        body 
-    {
-        font-family: Arial, sans-serif;
-        background:#a6e292ff;
-    }
-.container {
-        
-            text-align: center;
-            justify-content:center;
-            background:black;
-            width:390px;
-            margin:auto; 
-            border-radius:5px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f8fa;
+            margin: 0;
+            padding: 0;
         }
-         h1{
-            color:#a6e292ff;
-            
+        .container {
+            display:flex;
+            max-width: 700px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         }
-        
         ul{
-            background:black;
+          
             list-style-type:none;
             text-align:left;
-            width: fit-content;
-           
-
+            
+            
         }
        
-
         li{
-            background:#a6e292ff;
-            width: 302px;
-            margin-bottom: 5px;
-            
-            border-radius:2px;
+            background:#F7F8FE;
+            width: 302px; 
+            border-radius:5px;
             color:black;
             margin-left:2px;
             word-wrap: break-word;
             padding-left: 5px;
-            
+            border:rgba(8, 8, 8, 1); 
+                 
         }
-        a{
-            text-decoration:none;
-        }
-        button {
-     display: inline-block;
-        margin: 5px;
-        padding: 8px 12px;
-            background: #a6e292ff;
-            color: black;
+       
+        .create {
+            margin-left: 206px;
+            height: 35px;
+            border:none;
+            padding: 8px 12px;
+            background: #4498ecff;
             text-decoration: none;
             border-radius: 4px;
         }
-        button a{
-            color:black;
+        .create a{
+            color:white;
             text-decoration: none;
 
         }
+       .topnav {
+            background-color: #ffffff;
+            padding: 15px 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        ul a{
+            text-decoration:none;
+        }
+
+        .topnav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            margin-left: 15px;
+        }
+
+        .topnav a:hover {
+            color: #007bff;
+        }
+
+        .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+        }
+    
+      p{
+       
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      h6{
+        color:#7a7a7a;
+      }
+      .view{
+            margin-left: 206px;
+            height: 35px;
+            padding: 8px 12px;
+            background: #f4f6f8ff;
+            text-decoration: none;
+            border-color:#007bff;
+            border-radius: 4px;
+            
+      }
+      .view a{
+        color:#007bff;
+      }
+
+      
 
       
     </style>
 </head>
 <body>
+     <div class="topnav">
+        <div class="brand">Django Blog</div>
+        <div>
+            <a href="/posts/">All Posts</a>
+            <a class="active" href="/create/">Create Post</a>
+        </div>
+    </div>
     <div class="container">
+    <div class='list'>
     <h1>All Blog Posts</h1>
+    
     <ul>
         {% for post in posts %}
-           <a href="{% url 'post_detail' post.id %}">
             <li>
-                {{ post.title }}
+                <h3>{{ post.title }}</h3>
+                <h6>{{post.post_date}}</h6>
+                <p>{{post.content}}</p>
+                <button class="view"><a href="{% url 'post_detail' post.id %}">View Post</button>
             </li>
            </a>
         {% empty %}
             <li>No posts yet.</li>
         {% endfor %}
     </ul>
-    
-    <button>
+    </div>
+    <button class='create'>
     <a href="{% url 'create_post' %}">Create New Post</a>
     </button>
-    </div>
+
+  </div>
 </body>
 </html>

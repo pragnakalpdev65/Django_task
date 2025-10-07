@@ -1,57 +1,114 @@
 <!DOCTYPE html>
-<html>
+
 <head>
+   
     <title>{{ post.title }}</title>
-
     <style>
-
-body 
-    {
-        font-family: Arial, sans-serif;
-        background:#a6e292ff;
-    }
-.container {
-        
-            text-align: center;
-            justify-content:center;
-            background:black;
-            width:390px;
-            margin:auto; 
-            border-radius:5px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f8fa;
+            margin: 0;
+            padding: 0;
         }
-button,.container a {
-     display: inline-block;
-        margin: 5px;
-        padding: 8px 12px;
-            background: #a6e292ff;
+
+        .topnav {
+            background-color: #ffffff;
+            padding: 15px 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topnav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            margin-left: 15px;
+        }
+
+        .topnav a:hover {
+            color: #007bff;
+        }
+
+        .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        h3, p {
+            background: #efeded;
+            padding: 10px;
+            border-radius: 4px;
+            word-wrap: break-word;
+        }
+
+        h4 {
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        button, .container a {
+            display: inline-block;
+            margin: 5px 5px 0 0;
+            padding: 8px 12px;
+            background: #4498ec;
             color: black;
             text-decoration: none;
             border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-}
-h1,p{
-    color:#a6e292ff;
-    word-wrap:break-word;
-}
- 
-</style>
+        button:hover, .container a:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        form {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
+
+    <div class="topnav">
+        <div class="brand">Django Blog</div>
+        <div>
+            <a href="{% url 'showblog' %}">All Posts</a>
+            <a href="{% url 'create_post' %}">Create Post</a>
+        </div>
+    </div>
+
     <div class="container">
-        <h1>{{ post.title }}</h1>
+        <h4>Post Title:</h4>
+        <h3>{{ post.title }}</h3>
+
+        <h4>Post Content:</h4>
         <p>{{ post.content }}</p>
-        <p><small>Created at: {{ post.post_date }}</small></p>
 
         <a href="{% url 'edit_post' post.id %}">Edit Post</a>
 
-        <form action="{% url 'delete_post' post.id %}" method="POST" style="display:inline;">
+        <form action="{% url 'delete_post' post.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" onclick="return confirm('Are you sure you want to delete this post?');">
                 Delete
             </button>
         </form>
 
-        <a href="{% url 'showblog' %}">Back to all posts</a>
+        <a href="{% url 'showblog' %}">Back to All Posts</a>
     </div>
+
 </body>
 </html>
