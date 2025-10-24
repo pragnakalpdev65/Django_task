@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            registration
+        </title>
+                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <head>
+    <body>
+        <div class="d-flex justify-content-center align-items-center vh-100">
+            <div class="p-5 bg-light border rounded shadow">
+                <h3>Create Your Account</h3>
+       <form method="POST">
+  {% csrf_token %}
+
+  <div>
+    <label for="{{ form.username.id_for_label }}">Username:</label>
+    {{ form.username }}<br>
+    <small style="color: gray;">{{ form.username.help_text }}</small>
+  </div>
+
+  <div>
+    <label for="{{ form.password1.id_for_label }}">Password:</label>
+    {{ form.password1 }}<br>
+    <small style="color: gray;">{{ form.password1.help_text }}</small>
+  </div>
+
+  <div>
+    <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+    {{ form.password2 }}<br>
+    <small style="color: gray;">{{ form.password2.help_text }}</small>
+  </div>
+
+    <button type="submit" class="btn btn-primary w-100"><a href="{% url 'login'%}">Register</a></button>
+</form>
+
+    </div>
+</div>
+    </body>
+</html>
