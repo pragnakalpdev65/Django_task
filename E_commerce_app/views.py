@@ -40,7 +40,6 @@ class LoginView(View):
 
         if user is not None:
             login(request, user)
-            messages.success(request, "Login successful!")
             return redirect('category_list')
         else:
             messages.error(request, "Invalid username or password!")
