@@ -20,7 +20,7 @@
             <div class="card shadow-sm h-100 text-center border-0">
               {% if category.image %}
                 <a href="{% url 'product_by_category' category.id %}">
-                  <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}" style="height: 200px; object-fit: cover;">
+                  <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}" style="height: 200px; width: 100px;object-fit: cover;">
                 </a>
               {% else %}
                 <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">

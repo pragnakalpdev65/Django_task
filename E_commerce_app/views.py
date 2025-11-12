@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView, CreateView, ListView, View, DetailView
+from django.views.generic import TemplateView, CreateView, ListView, View, DetailView, UpdateView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -16,16 +16,18 @@ class IndexView(TemplateView):
 
 class RegisterView(View):
     def get(self, request):
-        return render(request, 'E_commerce_app/registration.html')
+        form = UserCreationForm()
+        return render(request, 'E_commerce_app/registration.html', {'form': form})
 
     def post(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = User.objects.create_user(username=username, password=password)
-        user.save()
-        return redirect('login')
-
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registration successful! Please log in.")
+            return redirect('login')
+        else:
+            messages.error(request, "Change your password or username")
+            return render(request, 'E_commerce_app/registration.html', {'form': form})
 
 class LoginView(View):
     def get(self, request):
@@ -34,11 +36,9 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print(username)
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            print(user)
             login(request, user)
             messages.success(request, "Login successful!")
             return redirect('category_list')
@@ -46,7 +46,12 @@ class LoginView(View):
             messages.error(request, "Invalid username or password!")
             return render(request, 'E_commerce_app/login.html', {'error': 'Invalid credentials'})
 
-
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, "You have been logged out successfully.")
+        return redirect('login')
+        
 class CategoryView(ListView):
     model = Category
     template_name = 'E_commerce_app/category.html'
@@ -110,6 +115,7 @@ class AddToCartView(View):
             cart_item.save()
 
         return redirect('product_by_category',category_id=product.category.id) 
+
 class CartView(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -129,8 +135,6 @@ class AddItemView(View):
         cart_item.quantity += 1
         cart_item.save()
         return redirect('cart')
-
-
 
 class RemoveItemView(View):
      def post(self, request, cart_id):
@@ -159,7 +163,6 @@ class CreateOrderView(View):
                 price=item.product.price
                 )
 
-            cart_items.delete()
             return redirect('orderdetail', order_id=order.id)
         return redirect('cart')
 
@@ -171,15 +174,22 @@ class OrderDetailView(DetailView):
 
         if order_id:
             order=get_object_or_404(Order,id=order_id,user=request.user)
-            order_item = OrderItem.objects.filter(order=order)
+            order_item = OrderItem.objects.filter(order=order)     
             total = sum(item.product.price * item.quantity for item in order_item)
-            #shippingdetail = ShippingDetail.objects.filter(name=request.user.username).first()
+
+            order_details = []
+            for item in order_item:
+                order_details.append({
+                    "item_name": item.product.name,
+                    "quantity": item.quantity,
+                    "price": item.price,
+                    "total_price": item.price * item.quantity,
+                })
 
             return render(request,'E_commerce_app/order_details.html',{
                 'order':order,
-                'order_item':order_item,
+                'order_item':order_details,
                 'total':total,
-                #'shippingdetail': shippingdetail,
             })
 
         else:
@@ -190,23 +200,23 @@ class OrderDetailView(DetailView):
 
 class ShippingDetailView(View):
     template_name = 'E_commerce_app/shipping_detail.html'
+    
 
     def get(self, request):
         form = ShippingForm()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
+        cart_items = Cart.objects.filter(user=request.user)
         name = request.POST.get('name')
         address = request.POST.get('address')
         mail = request.POST.get('mail')
 
         ShippingDetail.objects.create(name=name, address=address, mail=mail)
+        cart_items.delete()
         return redirect('thanks')
     
 class ThanksView(TemplateView):
     template_name = 'E_commerce_app/thanks.html'
 
 
-class AdminPageView(View):
-    def get(self, request):
-       return render(request, 'E_commerce_app/adminpage.html')

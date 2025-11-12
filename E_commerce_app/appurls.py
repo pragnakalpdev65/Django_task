@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import IndexView, RegisterView, LoginView, CategoryView, CategoryProductsView, AddToCartView, CartView, SearchView, AddItemView, RemoveItemView, OrderDetailView, CreateOrderView, ShippingDetailView, ProductDetailView, ThanksView, AdminPageView
+from .views import IndexView, RegisterView, LoginView, CategoryView, CategoryProductsView, AddToCartView, CartView, SearchView, AddItemView, RemoveItemView, OrderDetailView, CreateOrderView, ShippingDetailView, ProductDetailView, ThanksView, LogoutView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home'),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('categories/', CategoryView.as_view(), name='category_list'),
     path('categories/<int:category_id>/', CategoryProductsView.as_view(), name='product_by_category'),
     path('addtocart/<int:product_id>/',AddToCartView.as_view(),name='add_to_cart'),
@@ -18,5 +19,4 @@ urlpatterns = [
     path('orderdetail/<int:order_id>/', OrderDetailView.as_view(), name='orderdetail'),
     path('shippingdetail/',ShippingDetailView.as_view(),name='shippingdetail'),
     path('thanks/', ThanksView.as_view(), name='thanks'),
-    path('adminpage/',AdminPageView.as_view(), name='adminpage'),
-]
+    ]
