@@ -113,7 +113,9 @@ class AddToCartView(View):
             cart_item.quantity += 1
             cart_item.save()
 
+        messages.success(request, "Item added to cart!")
         return redirect('product_by_category',category_id=product.category.id) 
+
 
 class CartView(View):
     def get(self, request):
@@ -162,7 +164,7 @@ class CreateOrderView(View):
                 price=item.product.price
                 )
 
-            return redirect('orderdetail', order_id=order.id)
+            return redirect('shippingdetail')
         return redirect('cart')
 
 
@@ -176,18 +178,11 @@ class OrderDetailView(DetailView):
             order_item = OrderItem.objects.filter(order=order)     
             total = sum(item.product.price * item.quantity for item in order_item)
 
-            order_details = []
-            for item in order_item:
-                order_details.append({
-                    "item_name": item.product.name,
-                    "quantity": item.quantity,
-                    "price": item.price,
-                    "total_price": item.price * item.quantity,
-                })
+
 
             return render(request,'E_commerce_app/order_details.html',{
                 'order':order,
-                'order_item':order_details,
+                'order_item':order_item,
                 'total':total,
             })
 
@@ -196,6 +191,8 @@ class OrderDetailView(DetailView):
             return render(request, 'E_commerce_app/order_details.html', {
                 'orders': orders
             })
+
+class 
 
 class ShippingDetailView(View):
     template_name = 'E_commerce_app/shipping_detail.html'

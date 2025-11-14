@@ -3,31 +3,62 @@
 
 {% block content %}
   <div class="container mt-4">
-      <h2 class="text-center text-primary mb-4">Your Order Detail</h2>
+    <h2 class="text-center my-4">Your Past Orders</h2>
 
-    {% if order_item %}
-      <ul class="list-group mb-3">
-        {% for item in order_item %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{{ item.item_name }}</strong><br>
-              Price: ₹{{ item.price }} <br>
-              Quantity: {{ item.quantity }}
+{% if orders %}
+<div class="container">
+    <div class="list-group">
+
+        {% for order in orders %}
+        <a href="{% url 'orderdetail' order.id %}" 
+           class="list-group-item list-group-item-action">
+
+            <div class="d-flex justify-content-between">
+                <strong>Order #{{ order.id }}</strong>
+                <small>Total: ₹{{ order.total_price }}</small>
             </div>
-            <span>₹{{ item.total_price }}</span>
-          </li>
+
+            <small class="text-muted">
+                Placed on: {{ order.created_at|date:"d M Y h:i A" }}
+            </small>
+
+        </a>
         {% endfor %}
-      </ul>
 
-      <p class="fw-bold text-end fs-5">Total: ₹{{ total }}</p>
+    </div>
+</div>
+<h2 class="text-center my-4">Your Past Orders</h2>
 
-      <div class="text-end mb-5">
-        <a href="{% url 'shippingdetail' %}" class="btn btn-primary">Proceed to Shipping</a>
-      </div>
-    {% else %}
-      <div class="alert alert-warning text-center" role="alert">
-        No order yet!
-      </div>
-    {% endif %}
+{% if orders %}
+<div class="container">
+    <div class="list-group">
+
+        {% for order in orders %}
+        <a href="{% url 'orderdetail' order.id %}" 
+           class="list-group-item list-group-item-action">
+
+            <div class="d-flex justify-content-between">
+                <strong>Order #{{ order.id }}</strong>
+                <small>Total: ₹{{ order.total_price }}</small>
+            </div>
+
+            <small class="text-muted">
+                Placed on: {{ order.created_at|date:"d M Y h:i A" }}
+            </small>
+
+        </a>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% else %}
+<p class="text-center text-muted mt-5">You have no past orders.</p>
+{% endif %}
+
+{% else %}
+<p class="text-center text-muted mt-5">You have no past orders.</p>
+{% endif %}
+
   </div>
 {% endblock %}

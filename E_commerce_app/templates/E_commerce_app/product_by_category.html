@@ -2,60 +2,84 @@
 {% block title %}{{ category.name }} - E-cart{% endblock %}
 
 {% block head_extra %}
-    <style>
+<style>
+    .product-img {
+        width: 100%;
+        height: 250px;
+        object-fit: contain;
+    }
 
-      .product-img {
-        height: 200px;
-      }
-
-      .btn-click-effect {
+    .btn-click-effect {
         transition: transform 0.15s ease, box-shadow 0.15s ease;
-      }
+    }
 
-      .btn-click-effect:active {
+    .btn-click-effect:active {
         transform: scale(0.95);
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      }
+    }
 
-      a {
+    a {
         text-decoration: none;
-      }
-
-
-    </style>
-
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 
-    <div class="container text-center mb-4">
-      <h2 class="fw-bold text-primary">{{ category.name }}</h2>
-      <p class="text-muted">Explore our latest products below</p>
-    </div>
- 
-    <div class="container">
-      <div class="row g-4">
+<div class="container text-center mb-4">
+    <h2 class="fw-bold text-primary">{{ category.name }}</h2>
+    <p class="text-muted">Explore our latest products below</p>
+</div>
+
+<div class="container">
+    <div class="row g-4">
         {% for product in products %}
-          <div class="col-md-3 col-sm-6">
-            <a href="{% url 'product_detail' product.id %}">
+        <div class="col-md-3 col-sm-6">
             <div class="card product-card h-100">
-              <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
-              <div class="card-body text-center">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text fw-bold">₹{{ product.price }}</p>
-                <form method="POST" action="{% url 'add_to_cart' product.id %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-primary w-100 btn-click-effect">Add to Cart</button>
-                </form>
-              </div>
-            </div> 
-          </a>
-          </div>
+                <a href="{% url 'product_detail' product.id %}">
+                    <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+                </a>
+
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text fw-bold">₹{{ product.price }}</p>
+
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-primary btn-click-effect" onclick="showCartToastAndSubmit(this)">
+                            Add to Cart
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
         {% empty %}
-          <div class="text-center text-muted">No products available in this category.</div>
+        <div class="text-center text-muted">No products available in this category.</div>
         {% endfor %}
-      </div>
     </div>
+</div>
+
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    <div id="cartToast" class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Item added to cart!
+        </div>
+    </div>
+</div>
+
+<script>
+  function showCartToastAndSubmit(button) {
+    var toastEl = document.getElementById('cartToast');
+    var toast = new bootstrap.Toast(toastEl);
+    toast.show();
+
+    setTimeout(function() {
+        button.closest('form').submit();
+    }, 500);
+  }
+</script>
+
 
 {% endblock %}
-
