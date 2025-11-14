@@ -1,64 +1,34 @@
 {% extends "E_commerce_app/base.html" %}
-{% block title %}Your Order{% endblock %}
+{% block title %}Order detail{% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
-    <h2 class="text-center my-4">Your Past Orders</h2>
+<div class="container mt-4">
+    <h2 class="text-center my-4">Order Detail</h2>
 
-{% if orders %}
-<div class="container">
-    <div class="list-group">
+    <div class="list-group-item">
 
-        {% for order in orders %}
-        <a href="{% url 'orderdetail' order.id %}" 
-           class="list-group-item list-group-item-action">
-
+        <div class="d-flex justify-content-between">
+            <strong>Order ID: {{ order.id }}</strong>
+            <small>Placed on: {{ order.created_at }}</small>
+        </div>
+    
+        <hr>
+        {% for item in order_items %}
             <div class="d-flex justify-content-between">
-                <strong>Order #{{ order.id }}</strong>
-                <small>Total: ₹{{ order.total_price }}</small>
+                <span>{{ item.item_name }}</span>
+                <span>Qty: {{ item.quantity }}</span>
+                <span>₹{{ item.total_price }}</span>
             </div>
 
-            <small class="text-muted">
-                Placed on: {{ order.created_at|date:"d M Y h:i A" }}
-            </small>
-
-        </a>
+        {% empty %}
+            <p>No Items found.</p>
         {% endfor %}
 
+        <hr>
+        <div class="d-flex justify-content-between">
+            <strong>Total Amount:</strong>
+            <strong>₹{{ total }}</strong>
+        </div>
     </div>
 </div>
-<h2 class="text-center my-4">Your Past Orders</h2>
-
-{% if orders %}
-<div class="container">
-    <div class="list-group">
-
-        {% for order in orders %}
-        <a href="{% url 'orderdetail' order.id %}" 
-           class="list-group-item list-group-item-action">
-
-            <div class="d-flex justify-content-between">
-                <strong>Order #{{ order.id }}</strong>
-                <small>Total: ₹{{ order.total_price }}</small>
-            </div>
-
-            <small class="text-muted">
-                Placed on: {{ order.created_at|date:"d M Y h:i A" }}
-            </small>
-
-        </a>
-        {% endfor %}
-
-    </div>
-</div>
-
-{% else %}
-<p class="text-center text-muted mt-5">You have no past orders.</p>
-{% endif %}
-
-{% else %}
-<p class="text-center text-muted mt-5">You have no past orders.</p>
-{% endif %}
-
-  </div>
 {% endblock %}

@@ -113,7 +113,6 @@ class AddToCartView(View):
             cart_item.quantity += 1
             cart_item.save()
 
-        messages.success(request, "Item added to cart!")
         return redirect('product_by_category',category_id=product.category.id) 
 
 
@@ -135,6 +134,8 @@ class AddItemView(View):
         cart_item = get_object_or_404(Cart, id=cart_id, user=request.user)
         cart_item.quantity += 1
         cart_item.save()
+
+        messages.success(request, "Item added to cart!")
         return redirect('cart')
 
 class RemoveItemView(View):
@@ -145,6 +146,7 @@ class RemoveItemView(View):
             cart_item.save()
         else:
             cart_item.delete()
+            messages.success(request, "Item remove from cart!")
         return redirect('cart')
 
 class CreateOrderView(View):
@@ -156,6 +158,7 @@ class CreateOrderView(View):
             total_price = sum(item.product.price * item.quantity for item in cart_items)
             
             order = Order.objects.create(total_price=total_price, user = request.user)
+            
             for item in cart_items:
                 OrderItem.objects.create(
                 order=order,
@@ -163,10 +166,9 @@ class CreateOrderView(View):
                 quantity=item.quantity,
                 price=item.product.price
                 )
-
+            request.session['order_id'] = order.id 
             return redirect('shippingdetail')
         return redirect('cart')
-
 
 class OrderDetailView(DetailView):
 
@@ -177,22 +179,28 @@ class OrderDetailView(DetailView):
             order=get_object_or_404(Order,id=order_id,user=request.user)
             order_item = OrderItem.objects.filter(order=order)     
             total = sum(item.product.price * item.quantity for item in order_item)
-
-
-
+            print(order)
+            print(order_item)
+            order_details = []
+            for item in order_item:
+                order_details.append({
+                    "item_name": item.product.name,
+                    "quantity": item.quantity,
+                    "price": item.price,
+                    "total_price": item.price * item.quantity,
+                })
+            print(order_details)
             return render(request,'E_commerce_app/order_details.html',{
                 'order':order,
-                'order_item':order_item,
+                'order_items':order_details,
                 'total':total,
-            })
+            })   
 
         else:
             orders = Order.objects.filter(user=request.user)
-            return render(request, 'E_commerce_app/order_details.html', {
+            return render(request, 'E_commerce_app/order_list.html', {
                 'orders': orders
             })
-
-class 
 
 class ShippingDetailView(View):
     template_name = 'E_commerce_app/shipping_detail.html'
@@ -214,5 +222,7 @@ class ShippingDetailView(View):
     
 class ThanksView(TemplateView):
     template_name = 'E_commerce_app/thanks.html'
-
+    def get(self, request):
+        print(request.session.get("order_id"))
+        return render(request, self.template_name)
 

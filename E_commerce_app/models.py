@@ -36,7 +36,6 @@ class Cart(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    item = models.CharField(max_length=500)
     total_price=models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
