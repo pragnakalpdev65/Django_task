@@ -3,7 +3,7 @@
 
 {% block content %}
   <div class="container mt-4">
-    <h2 class="text-center my-4">Your Past Orders</h2>
+    <h2 class="text-center text-primary  my-4">Your Past Orders</h2>
 
 {% if orders %}
 <div class="container">
@@ -14,12 +14,12 @@
            class="list-group-item list-group-item-action">
 
             <div class="d-flex justify-content-between">
-                <strong>Order : {{ order.id }}</strong>
+                <strong>Order Placed on:  </strong>
                 <small>Total: ₹{{ order.total_price }}</small>
             </div>
 
             <small class="text-muted">
-                Placed on: {{ order.created_at }}
+            {{ order.created_at }}
             </small>
 
         </a>

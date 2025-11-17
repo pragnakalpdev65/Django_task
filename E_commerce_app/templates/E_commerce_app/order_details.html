@@ -1,34 +1,76 @@
 {% extends "E_commerce_app/base.html" %}
-{% block title %}Order detail{% endblock %}
+{% block title %}Order Detail{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="text-center my-4">Order Detail</h2>
 
-    <div class="list-group-item">
+<style>
+    .order-box {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 5px rgba(0,0,0,0.08);
+    }
 
-        <div class="d-flex justify-content-between">
-            <strong>Order ID: {{ order.id }}</strong>
-            <small>Placed on: {{ order.created_at }}</small>
+    .order-item {
+        padding: 12px 0;
+     
+        display: grid;
+        grid-template-columns: 1fr 100px 120px;
+        align-items: center;
+        font-size: 17px;
+    }
+
+
+
+    .header-row {
+        font-weight: bold;
+        border-bottom: 2px solid #0d6efd;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        display: grid;
+        grid-template-columns: 1fr 100px 120px;
+    }
+
+    .total-row {
+        font-size: 18px;
+        font-weight: bold;
+        padding-top: 10px;
+    }
+</style>
+
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4">Order Details</h2>
+
+    <div class="order-box">
+
+        <div class="text-end text-muted mb-3">
+            Placed on: {{ order.created_at }}
         </div>
-    
-        <hr>
-        {% for item in order_items %}
-            <div class="d-flex justify-content-between">
-                <span>{{ item.item_name }}</span>
-                <span>Qty: {{ item.quantity }}</span>
-                <span>₹{{ item.total_price }}</span>
-            </div>
 
+        <div class="header-row">
+            <span>Product</span>
+            <span class="text-center">Qunatity</span>
+            <span class="text-end">Price</span>
+        </div>
+
+        {% for item in order_items %}
+        <div class="order-item">
+            <span>{{ item.item_name }}</span>
+            <span class="text-center">{{ item.quantity }}</span>
+            <span class="text-end">₹{{ item.total_price }}</span>
+        </div>
         {% empty %}
-            <p>No Items found.</p>
+            <p class="text-muted text-center py-2">No items found.</p>
         {% endfor %}
 
         <hr>
-        <div class="d-flex justify-content-between">
-            <strong>Total Amount:</strong>
-            <strong>₹{{ total }}</strong>
+
+        <div class="d-flex justify-content-between total-row">
+            <span>Total Amount:</span>
+            <span>₹{{ total }}</span>
         </div>
+
     </div>
 </div>
+
 {% endblock %}

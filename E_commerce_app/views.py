@@ -26,7 +26,6 @@ class RegisterView(View):
             messages.success(request, "Registration successful! Please log in.")
             return redirect('login')
         else:
-            messages.error(request, "Change your password or username")
             return render(request, 'E_commerce_app/registration.html', {'form': form})
 
 class LoginView(View):
@@ -55,11 +54,6 @@ class CategoryView(ListView):
     model = Category
     template_name = 'E_commerce_app/category.html'
     context_object_name = 'categories'
-    # def category_list(request):
-    #     categories = Category.objects.all()
-    #     print(">>>>>>>>>",categories)
-    #     return render(request, 'E_commerce_app/category.html', {'categories': categories})
-    
 
 class SearchView(ListView):
     model = Product
@@ -155,18 +149,6 @@ class CreateOrderView(View):
 
         cart_items = Cart.objects.filter(user=request.user)
         if cart_items.exists():
-            total_price = sum(item.product.price * item.quantity for item in cart_items)
-            
-            order = Order.objects.create(total_price=total_price, user = request.user)
-            
-            for item in cart_items:
-                OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity,
-                price=item.product.price
-                )
-            request.session['order_id'] = order.id 
             return redirect('shippingdetail')
         return redirect('cart')
 
@@ -179,8 +161,7 @@ class OrderDetailView(DetailView):
             order=get_object_or_404(Order,id=order_id,user=request.user)
             order_item = OrderItem.objects.filter(order=order)     
             total = sum(item.product.price * item.quantity for item in order_item)
-            print(order)
-            print(order_item)
+
             order_details = []
             for item in order_item:
                 order_details.append({
@@ -189,7 +170,7 @@ class OrderDetailView(DetailView):
                     "price": item.price,
                     "total_price": item.price * item.quantity,
                 })
-            print(order_details)
+
             return render(request,'E_commerce_app/order_details.html',{
                 'order':order,
                 'order_items':order_details,
@@ -212,11 +193,25 @@ class ShippingDetailView(View):
 
     def post(self, request):
         cart_items = Cart.objects.filter(user=request.user)
+
+        
+        total_price = sum(item.product.price * item.quantity for item in cart_items)
+        order = Order.objects.create(user=request.user,total_price=total_price)
+
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+
         name = request.POST.get('name')
         address = request.POST.get('address')
         mail = request.POST.get('mail')
 
         ShippingDetail.objects.create(name=name, address=address, mail=mail)
+
         cart_items.delete()
         return redirect('thanks')
     

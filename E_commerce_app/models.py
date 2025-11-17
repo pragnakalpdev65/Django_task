@@ -49,6 +49,8 @@ class OrderItem(models.Model):
     price = models.PositiveIntegerField()
 
 class ShippingDetail(models.Model):
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
     name=models.CharField( max_length=50)
     address=models.TextField()
     mail=models.EmailField(max_length=254)
