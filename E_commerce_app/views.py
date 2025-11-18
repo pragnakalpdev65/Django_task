@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Product, Category,Cart,Order,OrderItem,ShippingDetail
 from .forms import ShippingForm
@@ -90,6 +91,7 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
 class AddToCartView(View):
+
     def post(self, request, product_id):
         if not request.user.is_authenticated:
             print("true")
@@ -152,7 +154,9 @@ class CreateOrderView(View):
             return redirect('shippingdetail')
         return redirect('cart')
 
-class OrderDetailView(DetailView):
+class OrderDetailView(LoginRequiredMixin, DetailView):
+
+    login_url = 'login'
 
     def get(self,request,order_id=None):
         cart_items = Cart.objects.filter(user=request.user)
